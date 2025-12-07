@@ -1,0 +1,339 @@
+.pm-container {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 30px;
+}
+
+
+.pm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #b8e0d2;
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pm-header h2 {
+    margin: 0;
+    color: #3b3b3b;
+}
+
+.pm-logout {
+    background-color: #ffb3c6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.pm-logout:hover {
+    background-color: #ff99b3;
+}
+
+
+.pm-tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pm-tab {
+    background-color: #e8eaf6;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 0 8px;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.pm-tab.active {
+    background-color: #c8d9eb;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.pm-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px auto;
+    width: 80%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.pm-inputs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.pm-inputs input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+
+.pm-btn {
+    background-color: #b3e5fc;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.pm-btn:hover {
+    background-color: #81d4fa;
+}
+
+
+.pm-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pm-item {
+    background-color: #fce4ec;
+    margin: 10px auto;
+    padding: 10px 20px;
+    border-radius: 10px;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pm-delete {
+    background-color: #ff8a80;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pm-delete:hover {
+    background-color: #ff5252;
+}
+
+
+.pm-placeholder {
+    text-align: center;
+    color: #777;
+}
+
+.pm-list li ul {
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.pm-item {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+}
+
+.pm-item:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.pm-sublist {
+    margin-top: 6px;
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 2px solid #ccc;
+    font-size: 0.9rem;
+    color: #444;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.pm-users-section .pm-user-form {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+    width: 70%;
+    margin: 0 auto 25px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: box-shadow 0.3s ease;
+}
+
+.pm-users-section .pm-user-form:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+
+.pm-users-section .pm-user-form h4 {
+    margin: 0;
+    color: #3b3b3b;
+    text-align: center;
+}
+
+
+.pm-users-section .pm-user-form .pm-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+.pm-users-section .pm-user-form input,
+.pm-users-section .pm-user-form select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 180px;
+    background-color: #fdfdfd;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pm-users-section .pm-user-form input:focus,
+.pm-users-section .pm-user-form select:focus {
+    outline: none;
+    border-color: #90caf9;
+    box-shadow: 0 0 5px rgba(144, 202, 249, 0.4);
+}
+
+
+.pm-users-section .pm-user-form .pm-btn {
+    background-color: #b3e5fc;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pm-users-section .pm-user-form .pm-btn:hover {
+    background-color: #81d4fa;
+    transform: translateY(-1px);
+}
+
+.pm-charts {
+    margin-top: 30px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.3s ease;
+}
+
+
+.pm-charts h3 {
+    margin-bottom: 20px;
+    color: #3b3b3b;
+    text-align: center;
+}
+
+
+.pm-chart-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+
+.pm-chart-buttons .pm-btn {
+    background-color: #dfe6fd;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.pm-chart-buttons .pm-btn:hover {
+    background-color: #c4d4fb;
+    transform: translateY(-2px);
+}
+
+
+.pm-chart-display {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.pm-chart-display > div {
+    max-width: 100%;
+    overflow-x: auto; /* Allow sliding if needed */
+    padding-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+
+    .pm-charts {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .pm-chart-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pm-chart-buttons .pm-btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+
+    .pm-chart-display > div {
+        transform: scale(0.9);
+        transform-origin: top center;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .pm-chart-display > div {
+        transform: scale(0.8);
+    }
+
+    .pm-chart-buttons .pm-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
