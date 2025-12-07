@@ -1,0 +1,470 @@
+--
+-- PostgreSQL database dump
+--
+
+\restrict QTMw8tZQhbDfXcFf1ofIfeZ8xJeUJd8kk078rVnlEISJZUgwjKCefpG0NiLutd7
+
+-- Dumped from database version 17.6
+-- Dumped by pg_dump version 17.6
+
+-- Started on 2025-12-06 19:55:27
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 225 (class 1255 OID 16578)
+-- Name: update_transaction_total(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.update_transaction_total() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  UPDATE transactions
+  SET total_amount = (
+    SELECT SUM(ti.quantity * p.psell)
+    FROM transaction_items ti
+    JOIN products p ON ti.pname = p.pname
+    WHERE ti.transaction_id = NEW.transaction_id
+  )
+  WHERE id = NEW.transaction_id;
+
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.update_transaction_total() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 217 (class 1259 OID 16449)
+-- Name: customers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.customers (
+    custname text NOT NULL,
+    custstatus text NOT NULL
+);
+
+
+ALTER TABLE public.customers OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16547)
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    pname character varying(100) NOT NULL,
+    pbuy double precision,
+    psell double precision
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 16469)
+-- Name: supply; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.supply (
+    pname text NOT NULL,
+    pquantity numeric(5,2) NOT NULL
+);
+
+
+ALTER TABLE public.supply OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 16561)
+-- Name: transaction_items; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transaction_items (
+    id integer NOT NULL,
+    transaction_id integer,
+    pname character varying(100),
+    quantity integer NOT NULL
+);
+
+
+ALTER TABLE public.transaction_items OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 16560)
+-- Name: transaction_items_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transaction_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.transaction_items_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4937 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: transaction_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transaction_items_id_seq OWNED BY public.transaction_items.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 16553)
+-- Name: transactions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transactions (
+    id integer NOT NULL,
+    custname character varying(100) NOT NULL,
+    transdate timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    total_amount numeric(10,2) DEFAULT 0
+);
+
+
+ALTER TABLE public.transactions OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 16552)
+-- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transactions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.transactions_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4938 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 16587)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    username character varying(50) NOT NULL,
+    userpass character varying(255) NOT NULL,
+    userstatus character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 4767 (class 2604 OID 16564)
+-- Name: transaction_items id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction_items ALTER COLUMN id SET DEFAULT nextval('public.transaction_items_id_seq'::regclass);
+
+
+--
+-- TOC entry 4764 (class 2604 OID 16556)
+-- Name: transactions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions ALTER COLUMN id SET DEFAULT nextval('public.transactions_id_seq'::regclass);
+
+
+--
+-- TOC entry 4924 (class 0 OID 16449)
+-- Dependencies: 217
+-- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.customers (custname, custstatus) FROM stdin;
+Hill	Regular
+Logan	Basic
+Matthew	Basic
+Pauline	Basic
+Abi	Basic
+Benjamin	Basic
+Bayley	Basic
+Chris	Basic
+Alan	Basic
+Kris	Basic
+Matt	Basic
+Brand	Basic
+Tina	Regular
+Rachel	Regular
+Alexander	Regular
+Jonathan	Regular
+Xavier	Regular
+John Lee	VIP
+Sarah Sanchez	VIP
+Bennett Albedo	VIP
+\.
+
+
+--
+-- TOC entry 4926 (class 0 OID 16547)
+-- Dependencies: 219
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (pname, pbuy, psell) FROM stdin;
+Rice Noodles	1.29	1.99
+Udon	2.49	3.99
+Vermicelli	1.59	2.99
+Glass Noodles	2.09	4.49
+Hand-pulled Noodles	1.49	3.99
+Flat Rice Noodles	3.49	6.99
+Fettuccini	0.99	1.99
+Spaghetti	0.59	0.99
+Fusilli	0.69	1.59
+Penne	3.99	7.99
+\.
+
+
+--
+-- TOC entry 4925 (class 0 OID 16469)
+-- Dependencies: 218
+-- Data for Name: supply; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.supply (pname, pquantity) FROM stdin;
+\.
+
+
+--
+-- TOC entry 4930 (class 0 OID 16561)
+-- Dependencies: 223
+-- Data for Name: transaction_items; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.transaction_items (id, transaction_id, pname, quantity) FROM stdin;
+9	13	Udon	5
+10	14	Udon	5
+11	15	Udon	5
+12	16	Udon	5
+13	17	Rice Noodles	10
+14	18	Glass Noodles	10
+15	19	Hand-pulled Noodles	10
+16	20	Udon	10
+17	21	Spaghetti	10
+18	22	Glass Noodles	10
+19	23	Glass Noodles	10
+20	24	Glass Noodles	10
+21	25	Glass Noodles	10
+22	26	Glass Noodles	10
+23	27	Udon	2325
+24	28	Fettuccini	350
+25	28	Spaghetti	350
+26	28	Fusilli	350
+27	28	Penne	350
+28	29	Fettuccini	350
+29	29	Spaghetti	350
+30	29	Fusilli	350
+31	29	Penne	350
+32	30	Rice Noodles	5
+33	31	Udon	5
+34	32	Udon	5
+35	33	Udon	5
+36	34	Udon	5
+37	35	Hand-pulled Noodles	10
+38	36	Glass Noodles	10
+39	37	Hand-pulled Noodles	10
+40	38	Glass Noodles	10
+41	39	Glass Noodles	10
+42	40	Flat Rice Noodles	5
+43	41	Spaghetti	15
+44	42	Spaghetti	30
+45	43	Fettuccini	8
+46	44	Fusilli	15
+47	45	Udon	5
+48	46	Udon	5
+49	47	Vermicelli	2
+50	48	Rice Noodles	5
+51	49	Spaghetti	15
+52	50	Penne	20
+\.
+
+
+--
+-- TOC entry 4928 (class 0 OID 16553)
+-- Dependencies: 221
+-- Data for Name: transactions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.transactions (id, custname, transdate, total_amount) FROM stdin;
+13	Rachel	2025-08-04 00:00:00	19.95
+14	Rachel	2025-08-11 00:00:00	19.95
+15	Rachel	2025-08-18 00:00:00	19.95
+16	Rachel	2025-08-25 00:00:00	19.95
+17	Hill	2025-08-03 00:00:00	19.90
+18	Hill	2025-08-10 00:00:00	44.90
+19	Hill	2025-08-17 00:00:00	39.90
+20	Hill	2025-08-24 00:00:00	39.90
+21	Hill	2025-08-31 00:00:00	9.90
+22	Tina	2025-08-02 00:00:00	44.90
+23	Tina	2025-08-09 00:00:00	44.90
+24	Tina	2025-08-16 00:00:00	44.90
+25	Tina	2025-08-23 00:00:00	44.90
+26	Tina	2025-08-30 00:00:00	44.90
+27	John Lee	2025-08-01 00:00:00	9276.75
+28	Sarah Sanchez	2025-08-04 00:00:00	4396.00
+29	Sarah Sanchez	2025-08-18 00:00:00	4396.00
+30	Alice	2025-11-07 02:56:35.599947	9.95
+31	Rachel	2025-09-01 00:00:00	19.95
+32	Rachel	2025-09-08 00:00:00	19.95
+33	Rachel	2025-09-15 00:00:00	19.95
+34	Rachel	2025-09-22 00:00:00	19.95
+35	Hill	2025-09-07 00:00:00	39.90
+36	Hill	2025-09-14 00:00:00	44.90
+37	Hill	2025-09-21 00:00:00	39.90
+38	Tina	2025-09-06 00:00:00	44.90
+39	Tina	2025-09-13 00:00:00	44.90
+40	John Lee	2025-09-20 00:00:00	34.95
+41	Maria Perez	2025-10-03 00:00:00	14.85
+42	Maria Perez	2025-10-10 00:00:00	29.70
+43	Daniel Yu	2025-10-15 00:00:00	15.92
+44	Daniel Yu	2025-10-28 00:00:00	23.85
+45	Hill	2025-10-05 00:00:00	19.95
+46	Rachel	2025-10-12 00:00:00	19.95
+47	Alice	2025-11-08 00:00:00	5.98
+48	Alice	2025-11-14 00:00:00	9.95
+49	Tina	2025-11-02 00:00:00	14.85
+50	John Lee	2025-11-21 00:00:00	159.80
+\.
+
+
+--
+-- TOC entry 4931 (class 0 OID 16587)
+-- Dependencies: 224
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (username, userpass, userstatus) FROM stdin;
+Sam	admin1	Manager
+Anne	admin2	Manager
+Justin	employ1	Employee
+Alex	employ2	Employee
+Joanne	employ3	Employee
+Sasha	employ4	Employee
+Nathan	employ5	Employee
+Johnny	employee17	Employee
+\.
+
+
+--
+-- TOC entry 4939 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: transaction_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transaction_items_id_seq', 33, true);
+
+
+--
+-- TOC entry 4940 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transactions_id_seq', 31, true);
+
+
+--
+-- TOC entry 4769 (class 2606 OID 16551)
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (pname);
+
+
+--
+-- TOC entry 4773 (class 2606 OID 16566)
+-- Name: transaction_items transaction_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction_items
+    ADD CONSTRAINT transaction_items_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4771 (class 2606 OID 16559)
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4775 (class 2606 OID 16591)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (username);
+
+
+--
+-- TOC entry 4778 (class 2620 OID 16580)
+-- Name: transaction_items trg_update_transaction_total; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER trg_update_transaction_total AFTER INSERT OR DELETE OR UPDATE ON public.transaction_items FOR EACH ROW EXECUTE FUNCTION public.update_transaction_total();
+
+
+--
+-- TOC entry 4776 (class 2606 OID 16572)
+-- Name: transaction_items transaction_items_pname_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction_items
+    ADD CONSTRAINT transaction_items_pname_fkey FOREIGN KEY (pname) REFERENCES public.products(pname);
+
+
+--
+-- TOC entry 4777 (class 2606 OID 16567)
+-- Name: transaction_items transaction_items_transaction_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transaction_items
+    ADD CONSTRAINT transaction_items_transaction_id_fkey FOREIGN KEY (transaction_id) REFERENCES public.transactions(id) ON DELETE CASCADE;
+
+
+-- Completed on 2025-12-06 19:55:27
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict QTMw8tZQhbDfXcFf1ofIfeZ8xJeUJd8kk078rVnlEISJZUgwjKCefpG0NiLutd7
+
